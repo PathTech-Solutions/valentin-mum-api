@@ -4,7 +4,9 @@ RUN apt-get update && apt-get install -y wget less groff
 RUN apt-get update -qq && apt-get install -y build-essential libsnappy-dev libpq-dev cron libicu-dev git
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ENV APP_HOME=/app
+ARG RAILS_ENV=development
+ENV APP_HOME=/app \
+	RAILS_ENV=$RAILS_ENV
 
 RUN mkdir $APP_HOME
 WORKDIR $APP_HOME
@@ -12,7 +14,9 @@ WORKDIR $APP_HOME
 ADD Gemfile Gemfile.lock $APP_HOME/
 RUN bundle install --jobs 20 --retry 5
 
-ADD . $APP_HOME/
-
 EXPOSE 3000
-CMD bundle exec rails s
+CMD bundle exec rails s -b 0.0.0.0
+
+COPY entrypoint.sh /usr/bin/
+RUN chmod +x /usr/bin/entrypoint.sh
+ENTRYPOINT ["entrypoint.sh"]

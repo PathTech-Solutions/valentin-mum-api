@@ -7,11 +7,15 @@ services:
     environment:
       POSTGRES_PASSWORD: development
   rails-api:
-    build: .
+    build:
+      args:
+        - RAILS_ENV
+      context: .
+      dockerfile: Dockerfile_development
     command: bundle exec rails s -p 3000 -b '0.0.0.0'
     volumes:
       - .:/app
     ports:
       - "3000:3000"
-    depends_on:
+    links:
       - db
