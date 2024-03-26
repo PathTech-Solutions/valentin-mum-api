@@ -2,12 +2,11 @@ require 'rails_helper'
 
 RSpec.describe Answer, type: :model do
   let(:answer) { FactoryBot.build(:answer) }
-  let(:question_with_answers) { FactoryBot.create(:question) do |question|
-      FactoryBot.create_list(:answer, 2, question: question)
-    end
-  }
+  question_with_answers = FactoryBot.create(:question) do |question|
+    FactoryBot.create_list(:answer, 2, question: question)
+  end
   
-  let(:answer_question_3_answers) { FactoryBot.create(:answer, question: question_with_answers) }
+  answer_question_3_answers = FactoryBot.create(:answer, question: question_with_answers)
   
   context 'Should validate' do
     it 'with score, text and question present' do

@@ -4,6 +4,7 @@ class Question < ApplicationRecord
     has_many :answers
 
     validates :question_type, inclusion: ['open', 'test']
+    validates_presence_of :statement
 
 
     def answers_number
