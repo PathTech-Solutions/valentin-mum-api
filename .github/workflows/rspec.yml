@@ -1,3 +1,8 @@
+env:
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: development
+  RAILS_ENV: test
+
 name: Run RSpec tests
 on: [push]
 jobs:
