@@ -2,6 +2,7 @@ env:
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: development
   RAILS_ENV: test
+  RAILS_HOST_DB_TEST: localhost
 
 name: Run RSpec tests
 on: [push]

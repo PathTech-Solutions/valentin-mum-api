@@ -55,14 +55,14 @@ RSpec.describe Answer, type: :model do
   
   context 'Given answers' do
     answer_with_given_answers.score=2
+    it 'is set' do
+      expect(answer_with_given_answers).to be_valid
+      expect(answer_with_given_answers.given_answers.count).to eq(2)
+    end
     it 'is not set' do
       answer_with_given_answers.given_answers=[]
       expect(answer_with_given_answers).to be_valid
       expect(answer_with_given_answers.given_answers.count).to eq(0)
-    end
-    it 'is set' do
-      expect(answer_with_given_answers).to be_valid
-      expect(answer_with_given_answers.given_answers.count).to eq(2)
     end
   end
 

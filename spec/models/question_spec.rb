@@ -52,14 +52,14 @@ RSpec.describe Question, type: :model do
   end
 
   context 'Questionnaires' do
+    it 'set is valid' do
+      expect(question_with_questionnaires).to be_valid
+      expect(question_with_questionnaires.questionnaires.count).to eq(2)
+    end
     it 'not set is valid' do
       question_with_questionnaires.questionnaires = []
       expect(question_with_questionnaires).to be_valid
       expect(question_with_questionnaires.questionnaires.count).to eq(0)
-    end
-    it 'set is valid' do
-      expect(question_with_questionnaires).to be_valid
-      expect(question_with_questionnaires.questionnaires.count).to eq(2)
     end
   end
 end

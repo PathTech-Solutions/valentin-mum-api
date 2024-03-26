@@ -12,14 +12,14 @@ RSpec.describe Category, type: :model do
   end
 
   context 'Questionnaires' do
+    it 'set is valid' do
+      expect(category).to be_valid
+      expect(category.questionnaires.count).to eq(2)
+    end
     it 'not set is valid' do
       category.questionnaires = []
       expect(category).to be_valid
       expect(category.questionnaires.count).to eq(0)
-    end
-    it 'set is valid' do
-      expect(category).to be_valid
-      expect(category.questionnaires.count).to eq(2)
     end
   end
 
