@@ -1,13 +1,17 @@
 require 'rails_helper'
 
 RSpec.describe Answer, type: :model do
-  let(:answer) { FactoryBot.build(:answer) }
+  let(:answer) { FactoryBot.build(:answer, score:1) }
+  
   question_with_answers = FactoryBot.create(:question) do |question|
     FactoryBot.create_list(:answer, 2, question: question)
   end
-  
   answer_question_3_answers = FactoryBot.create(:answer, question: question_with_answers)
   
+  answer_with_given_answers =  FactoryBot.create(:answer, score:1) do |answer|
+    FactoryBot.create_list(:given_answer, 2, answer:answer)
+  end
+
   context 'Should validate' do
     it 'with score, text and question present' do
       answer.score=1
@@ -48,6 +52,19 @@ RSpec.describe Answer, type: :model do
       expect(answer).not_to be_valid
     end
   end
+  
+  context 'Given answers' do
+    answer_with_given_answers.score=2
+    it 'is not set' do
+      answer_with_given_answers.given_answers=[]
+      expect(answer_with_given_answers).to be_valid
+      expect(answer_with_given_answers.given_answers.count).to eq(0)
+    end
+    it 'is set' do
+      expect(answer_with_given_answers).to be_valid
+      expect(answer_with_given_answers.given_answers.count).to eq(2)
+    end
+  end
 
   context 'Score with question with 3 answers' do
     it 'answers number is 4' do
@@ -82,6 +99,4 @@ RSpec.describe Answer, type: :model do
       expect(answer_question_3_answers).to be_valid
     end
   end
-
-  
 end

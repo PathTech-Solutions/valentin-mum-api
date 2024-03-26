@@ -3,6 +3,10 @@ require 'rails_helper'
 RSpec.describe Question, type: :model do
   let(:question) { FactoryBot.build(:question) }
   let(:answer) { FactoryBot.build(:answer, 1, question: question) }
+
+  question_with_questionnaires = FactoryBot.create(:question) do |question|
+    FactoryBot.create_list(:questionnaire, 2, questions: [question])
+  end
   
   context 'Should validate' do
     it 'with statement, question_type and answer present' do
@@ -44,6 +48,18 @@ RSpec.describe Question, type: :model do
     it 'equals question answers list' do
       answers_number_hard = question.answers.count
       expect(question.answers_number).to eq(answers_number_hard)
+    end
+  end
+
+  context 'Questionnaires' do
+    it 'not set is valid' do
+      question_with_questionnaires.questionnaires = []
+      expect(question_with_questionnaires).to be_valid
+      expect(question_with_questionnaires.questionnaires.count).to eq(0)
+    end
+    it 'set is valid' do
+      expect(question_with_questionnaires).to be_valid
+      expect(question_with_questionnaires.questionnaires.count).to eq(2)
     end
   end
 end
