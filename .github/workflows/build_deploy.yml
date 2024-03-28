@@ -66,6 +66,7 @@ jobs:
             docker rm $(echo $IMAGE_NAME)
             # Run a new container from a new image
             docker run -d \
+            -p 3000:3000 \
             --env RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} \
             --restart always \
             --name $(echo $IMAGE_NAME) \
