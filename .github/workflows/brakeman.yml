@@ -1,0 +1,15 @@
+name: Run Brakeman
+on: [push]
+jobs:
+  run-brakeman:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          # runs 'bundle install' and caches installed gems automatically
+          bundler-cache: true
+      - name: Run brakeman
+        run: |
+          bundle exec brakeman
