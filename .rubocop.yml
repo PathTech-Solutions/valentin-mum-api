@@ -17,6 +17,7 @@ AllCops:
     - Gemfile
     - Rakefile
     - config.ru
+    - vendor/bundle/**/*
 
 Metrics/BlockLength:
   Exclude: 
