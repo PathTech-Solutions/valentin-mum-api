@@ -1,5 +1,5 @@
 class Category < ApplicationRecord
-    has_many :questionnaires
+  has_many :questionnaires, dependent: :restrict_with_error
 
-    validates_presence_of :name
+  validates :name, presence: true
 end

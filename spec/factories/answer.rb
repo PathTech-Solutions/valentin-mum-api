@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :answer do
-    text { 'Sample text' }
+    text { "Sample text" }
     sequence(:score)
     question
   end

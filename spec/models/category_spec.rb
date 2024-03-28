@@ -1,33 +1,32 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Category, type: :model do
-  category = FactoryBot.create(:category) do |category|
-      FactoryBot.create_list(:questionnaire, 2,category:category)
-    end
+  category = FactoryBot.create(:category) do |category_new|
+    FactoryBot.create_list(:questionnaire, 2, category: category_new)
+  end
 
-  context 'Should validate' do
-    it 'with name present' do
+  context "Should validate" do
+    it "with name present" do
       expect(category).to be_valid
     end
   end
 
-  context 'Questionnaires' do
-    it 'set is valid' do
+  context "Questionnaires" do
+    it "set is valid" do
       expect(category).to be_valid
       expect(category.questionnaires.count).to eq(2)
     end
-    it 'not set is valid' do
+    it "not set is valid" do
       category.questionnaires = []
       expect(category).to be_valid
       expect(category.questionnaires.count).to eq(0)
     end
   end
 
-  context 'Should not validate' do
-    it 'with name not present' do
+  context "Should not validate" do
+    it "with name not present" do
       category.name = nil
       expect(category).not_to be_valid
     end
   end
-
 end
