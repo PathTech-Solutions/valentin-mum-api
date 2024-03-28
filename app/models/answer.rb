@@ -9,7 +9,7 @@ class Answer < ApplicationRecord
   private
 
   def score_within_range
-    unless question
+    if question.nil?
       errors.add(:answer, "question must be set")
       return
     end
