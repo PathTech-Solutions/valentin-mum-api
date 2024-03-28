@@ -84,6 +84,8 @@ test:
 production:
   <<: *default
   database: app_production
-  username: postgres
+  username: doadmin
   host: <%= ENV["DATABASE_URL"] %>
   password: <%= ENV["APP_DATABASE_PASSWORD"] %>
+  port: 25060
+  sslmode: require

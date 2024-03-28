@@ -69,6 +69,7 @@ jobs:
             -p 3000:3000 \
             --env RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} \
             --env DATABASE_URL=${{ secrets.DATABASE_URL }} \
+            --env APP_DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
             --restart always \
             --name $(echo $IMAGE_NAME) \
             $(echo $REGISTRY)/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7)
