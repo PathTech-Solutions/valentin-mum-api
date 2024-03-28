@@ -266,7 +266,6 @@ DEPENDENCIES
   rdoc (>= 6.6.3.1)
   rspec-rails
   rubocop
-  rubocop-factory_bot
   rubocop-rails
   rubocop-rspec
   tzinfo-data
