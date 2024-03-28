@@ -1,5 +1,5 @@
 name: Run Reek
-on: [push]
+on: [pull_request]
 jobs:
   run-reek:
     runs-on: ubuntu-latest
