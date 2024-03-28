@@ -1,0 +1,22 @@
+permissions:
+  checks: write
+  contents: write
+  issues: write
+  pull-requests: write
+name: Run Reek
+on: [pull_request]
+jobs:
+  run-reek:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          # runs 'bundle install' and caches installed gems automatically
+          bundler-cache: true
+      - name: Run reek
+        uses: reviewdog/action-reek@v1
+        with:
+          reek_version: gemfile
+          reporter: github-pr-review

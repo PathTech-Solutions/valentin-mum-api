@@ -1,0 +1,8 @@
+detectors:
+  # You can disable smells completely
+  IrresponsibleModule:
+    enabled: false
+
+exclude_paths:
+  - db/
+  - vendor/

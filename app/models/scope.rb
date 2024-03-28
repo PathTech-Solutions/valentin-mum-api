@@ -1,5 +1,5 @@
 class Scope < ApplicationRecord
-    has_many :sessions
+  has_many :sessions, dependent: :restrict_with_error
 
-    validates_presence_of :name
+  validates :name, presence: true
 end

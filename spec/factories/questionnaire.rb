@@ -1,5 +1,5 @@
 FactoryBot.define do
-    factory :questionnaire do
-        category
-    end
+  factory :questionnaire do
+    category
+  end
 end

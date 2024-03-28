@@ -31,18 +31,31 @@ gem "bootsnap", require: false
 
 gem "rdoc", ">= 6.6.3.1"
 
+gem 'rubocop'
+gem 'rubocop-rails'
+gem 'rubocop-rspec'
+
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin Ajax possible
 # gem "rack-cors"
 
+group :test do
+  gem 'rubocop-discourse'
+end
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ]
+
   gem 'factory_bot_rails'
   gem 'rspec-rails'
   gem 'rails-controller-testing'
+
+  gem 'brakeman'
+
+  gem 'reek'
 end
 
 group :development do
