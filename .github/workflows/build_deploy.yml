@@ -18,6 +18,7 @@ on: [push]
 env:
   REGISTRY: "registry.digitalocean.com/pathtechregistry"
   IMAGE_NAME: "valentin-mum-api"
+  RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
 
 #3
 jobs:
