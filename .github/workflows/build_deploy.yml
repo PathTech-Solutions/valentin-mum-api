@@ -68,7 +68,7 @@ jobs:
             docker run -d \
             -p 3000:3000 \
             --env RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} \
-            DATABASE_URL=${{ secrets.DATABASE_URL }} \
+            --env DATABASE_URL=${{ secrets.DATABASE_URL }} \
             --restart always \
             --name $(echo $IMAGE_NAME) \
             $(echo $REGISTRY)/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7)
