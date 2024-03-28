@@ -1,7 +1,8 @@
 permissions:
   checks: write
-  contents: read
-  pull-requests: read
+  contents: write
+  issues: write
+  pull-requests: write
 name: Run Reek
 on: [pull_request]
 jobs:
