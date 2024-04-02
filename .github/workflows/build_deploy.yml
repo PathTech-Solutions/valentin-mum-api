@@ -64,6 +64,7 @@ jobs:
             # Run a new container from a new image
             docker run -d \
             -p 3000:3000 \
+            -v /root/app:/app \
             --env RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} \
             --env DATABASE_URL=${{ secrets.DATABASE_URL }} \
             --env APP_DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
