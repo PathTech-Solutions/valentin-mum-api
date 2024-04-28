@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Values.general.namespace }}
+  labels:
+    app: {{ .Values.deployment.app_name }}
+  name: {{ .Values.deployment.app_name }}
+spec:
+  replicas: {{ .Values.deployment.ruby_app_replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.deployment.app_name }}
+  minReadySeconds: 5
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        timestamp: {{ .Values.deployment.timestamp }}
+      labels:
+        app: {{ .Values.deployment.app_name }}
+        role: atom
+        date: "{{ now | unixEpoch }}"
+    spec:
+      containers:
+        - args:
+            - bundle
+            - exec
+            - rails
+            - s
+            - -b
+            - 0.0.0.0
+          envFrom:
+          - configMapRef:
+              name: {{ .Values.general.configmap }}
+          - secretRef:
+              name: {{ .Values.general.secret }}
+          env:
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          image: "{{ .Values.deployment.image }}:latest"
+          name: {{ .Values.deployment.app_name }}
+          imagePullPolicy: {{ .Values.general.imagePullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.ruby_port }}
+          readinessProbe:
+            httpGet:
+              path: /up
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
+          livenessProbe:
+            tcpSocket:
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 60
+          securityContext:
+            allowPrivilegeEscalation: false
+      imagePullSecrets:
+        - name: regcred
+      restartPolicy: {{ .Values.general.restartPolicy }}

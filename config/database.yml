@@ -84,5 +84,5 @@ test:
 production:
   <<: *default
   database: app_production
-  host: <%= ENV["DATABASE_URL"] %>
+  host: pgdb
   password: <%= ENV["APP_DATABASE_PASSWORD"] %>

@@ -1,0 +1,17 @@
+general:
+  namespace: valentin-mum-api
+  configmap: valentin-mum-api-configmap
+  secret: valentin-mum-api-secrets
+  restartPolicy: Always
+  imagePullPolicy: Always
+pgdb:
+  secret: pgdb-secrets
+  configmap: pgdb-configmap
+service:
+  name: rails-api-valentin-mum-api
+  ruby_port: 3000
+deployment:
+  app_name: rails-api
+  image: viktillo/valentin-mum-api
+  rails_api_replicas: 1
+  timestamp: CI_JOB_STARTED_AT
