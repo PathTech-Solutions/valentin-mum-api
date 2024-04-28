@@ -55,6 +55,3 @@ jobs:
       - name: Run Helm upgrade
         run: helm upgrade -n valentin-mum-api valentin-mum-api kubernetes/ -f kubernetes/values.yaml --kubeconfig=/home/runner/.kube/config
           
-
-
-
