@@ -45,7 +45,7 @@ jobs:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       - name: Save DigitalOcean kubeconfig with short-lived credentials
-        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 1200 valentin-mum-api
+        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 1200 valentin-mum-api && cat /home/runner/.kube/config
       
       - uses: azure/setup-helm@v1
         with:
