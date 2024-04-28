@@ -1,73 +1,72 @@
-name: CI
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
 
-# 1
-# Controls when the workflow will run
-on: [push]
-# on:
-#   # Triggers the workflow on push events but only for the main branch
-#   push:
-#     branches: [ main ]
+# GitHub recommends pinning actions to a commit SHA.
+# To get a newer version, you will need to update the SHA.
+# You can also reference a tag or branch, but the action may change without warning.
 
-#   # Allows you to run this workflow manually from the Actions tab
-#   workflow_dispatch:
-#     inputs:
-#       version:
-#         description: 'Image version'
-#         required: true
-#2
+name: Publish Docker image
+
+on: 
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Image version'
+        required: true
+
 env:
-  REGISTRY: "registry.digitalocean.com/pathtechregistry"
+  REGISTRY: "viktillo"
   IMAGE_NAME: "valentin-mum-api"
 
-#3
 jobs:
-  build_and_push:
+  push_to_registry:
+    name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout the repo 
-        uses: actions/checkout@v2
-        
-      - name: Build container image
-        run: docker build -t $(echo $REGISTRY)/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7) .
-
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v3
         with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-    
-      - name: Log in to DigitalOcean Container Registry with short-lived credentials
-        run: doctl registry login --expiry-seconds 600
-      
-      - name: Push image to DigitalOcean Container Registry
-        run: docker push $(echo $REGISTRY)/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7)
-        
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: $(echo $REGISTRY)/$(echo $IMAGE_NAME):latest
+
   deploy:
     runs-on: ubuntu-latest
-    needs: build_and_push
-    
+    needs: push_to_registry
+
     steps:
-      - name: Deploy to Digital Ocean droplet via SSH action
-        uses: appleboy/ssh-action@v0.1.3
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Kubectl
+        uses: azure/setup-kubectl@v1
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v1
+
+      - name: Configure Kubeconfig
+        uses: azure/k8s-set-context@v1
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSHKEY }}
-          passphrase: ${{ secrets.PASSPHRASE }}
-          envs: IMAGE_NAME,REGISTRY,{{ secrets.DIGITALOCEAN_ACCESS_TOKEN }},GITHUB_SHA
-          script: |
-            # Login to registry
-            docker login -u ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} -p ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} registry.digitalocean.com
-            # Stop running container
-            docker stop $(echo $IMAGE_NAME)
-            # Remove old container
-            docker rm $(echo $IMAGE_NAME)
-            # Run a new container from a new image
-            docker run -d \
-            -p 3000:3000 \
-            --env RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} \
-            --env DATABASE_URL=${{ secrets.DATABASE_URL }} \
-            --env APP_DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
-            --restart always \
-            --network api-network \
-            --name $(echo $IMAGE_NAME) \
-            $(echo $REGISTRY)/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7)
+          method: kubeconfig
+          kubeconfig: ${{ secrets.KUBE_CONFIG_DATA }}
+
+      - name: Run Helm upgrade
+        run: |
+          helm upgrade valentin-mum-api kubernetes/ -f kubernetes/values.yaml
+
+
+
