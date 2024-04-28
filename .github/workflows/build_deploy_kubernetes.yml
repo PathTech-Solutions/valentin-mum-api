@@ -29,7 +29,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: $(echo $REGISTRY)/$(echo $IMAGE_NAME):latest
+          tags: $REGISTRY/$IMAGE_NAME:latest
 
   deploy:
     runs-on: ubuntu-latest
