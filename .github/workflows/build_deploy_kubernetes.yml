@@ -39,21 +39,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Kubectl
-        uses: azure/setup-kubectl@v1
-
-      - name: Set up Helm
-        uses: azure/setup-helm@v1
-
-      - name: Configure Kubeconfig
-        uses: azure/k8s-set-context@v1
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
         with:
-          method: kubeconfig
-          kubeconfig: ${{ secrets.KUBE_CONFIG_DATA }}
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Save DigitalOcean kubeconfig with short-lived credentials
+        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 1200 tml-digital-ocean-cluster
+      
+      - uses: azure/setup-helm@v1
+        with:
+          version: 'v3.14.3' # default is latest stable
+        id: install
 
       - name: Run Helm upgrade
-        run: |
-          helm upgrade valentin-mum-api kubernetes/ -f kubernetes/values.yaml
+        uses: WyriHaximus/github-action-helm3@v2
+        with:
+          exec: helm upgrade valentin-mum-api kubernetes/ -f kubernetes/values.yaml
+          kubeconfig: '/home/runner/.kube/config'
+          
 
 
 
