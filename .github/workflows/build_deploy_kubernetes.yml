@@ -8,32 +8,32 @@ env:
   IMAGE_NAME: "valentin-mum-api"
 
 jobs:
-  # push_to_registry:
-  #   name: Push Docker image to Docker Hub
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     -
-  #       name: Set up QEMU
-  #       uses: docker/setup-qemu-action@v3
-  #     -
-  #       name: Set up Docker Buildx
-  #       uses: docker/setup-buildx-action@v3
-  #     -
-  #       name: Login to Docker Hub
-  #       uses: docker/login-action@v3
-  #       with:
-  #         username: ${{ secrets.DOCKERHUB_USERNAME }}
-  #         password: ${{ secrets.DOCKERHUB_TOKEN }}
-  #     -
-  #       name: Build and push
-  #       uses: docker/build-push-action@v5
-  #       with:
-  #         push: true
-  #         tags: viktillo/valentin-mum-api:latest
+  push_to_registry:
+    name: Push Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: viktillo/valentin-mum-api:latest
 
   deploy:
     runs-on: ubuntu-latest
-    # needs: push_to_registry
+    needs: push_to_registry
 
     steps:
       - name: Checkout code
@@ -45,7 +45,7 @@ jobs:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       - name: Save DigitalOcean kubeconfig with short-lived credentials
-        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 1200 valentin-mum-api && cat /home/runner/.kube/config
+        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 1200 tml-digital-ocean-cluster
       
       - uses: azure/setup-helm@v1
         with:
@@ -53,10 +53,7 @@ jobs:
         id: install
 
       - name: Run Helm upgrade
-        uses: WyriHaximus/github-action-helm3@v2
-        with:
-          exec: helm upgrade valentin-mum-api kubernetes/ -f kubernetes/values.yaml
-          kubeconfig: '/home/runner/.kube/config'
+        run: helm upgrade valentin-mum-api kubernetes/ -f kubernetes/values.yaml --kubeconfig=/home/runner/.kube/config
           
 
 
