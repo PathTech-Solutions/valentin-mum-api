@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: pgdb
+spec:
+  selector:
+    matchLabels:
+      app: pgdb
+  serviceName: pgdb
+  template:
+    metadata:
+      labels:
+        app: pgdb
+    spec:
+      containers:
+      - name: pgdb
+        image: postgres:16-alpine
+        envFrom:
+          - configMapRef:
+              name: {{ .Values.pgdb.configmap }}
+          - secretRef:
+              name: {{ .Values.pgdb.secret }}
+        volumeMounts:
+        - name: db-data
+          mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+  - metadata:
+      name: db-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 10Gi

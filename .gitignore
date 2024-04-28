@@ -5,6 +5,7 @@
 #   git config --global core.excludesfile '~/.gitignore_global'
 
 # Ignore bundler config.
+.DS_Store
 /.bundle
 
 # Ignore all environment files (except templates).
@@ -31,3 +32,5 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+/config/credentials/production.key

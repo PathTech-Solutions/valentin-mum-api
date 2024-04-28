@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ .Values.general.namespace }}
+  labels:
+    app: pgdb
+  name: pgdb
+spec:
+  ports:
+  - port: 5432
+    targetPort: 5432
+  selector:
+    app: pgdb

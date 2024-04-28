@@ -23,6 +23,9 @@ Metrics/BlockLength:
   Exclude: 
     - spec/**/*.rb
 
+Style/EmptyMethod:
+  enabled: false
+
 RSpec/MultipleExpectations:
   Enabled: false
 
