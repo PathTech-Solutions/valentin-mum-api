@@ -12,9 +12,12 @@ name: Publish Docker image
 on: 
   workflow_dispatch:
     inputs:
-      version:
-        description: 'Image version'
+      logLevel:
+        description: 'Log level'     
         required: true
+        default: 'warning'
+      tags:
+        description: 'Test scenario tags' 
 
 env:
   REGISTRY: "viktillo"
