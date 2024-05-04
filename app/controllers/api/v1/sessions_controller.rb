@@ -1,2 +1,6 @@
-class Api::V1::SessionsController < ApplicationController
+module Api
+  module V1
+    class SessionsController < ApplicationController
+    end
+  end
 end

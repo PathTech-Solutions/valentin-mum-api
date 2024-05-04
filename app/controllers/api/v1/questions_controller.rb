@@ -1,2 +1,6 @@
-class Api::V1::QuestionsController < ApplicationController
+module Api
+  module V1
+    class QuestionsController < ApplicationController
+    end
+  end
 end

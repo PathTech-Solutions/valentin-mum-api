@@ -31,7 +31,8 @@ module ResourcefulActions
   def destroy
     if @resource.destroy
       render status: :ok,
-             json:   { message: "#{controller_name.classify} with id #{@resource.id} destroyed successfully" }
+             json:   { message: "#{controller_name.classify} with id #{@resource.id} destroyed
+             successfully".strip }
     else
       render status: :internal_server_error, json: @resource.errors.full_messages
     end

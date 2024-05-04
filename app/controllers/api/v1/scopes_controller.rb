@@ -1,2 +1,6 @@
-class Api::V1::ScopesController < ApplicationController
+module Api
+  module V1
+    class ScopesController < ApplicationController
+    end
+  end
 end
