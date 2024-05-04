@@ -43,6 +43,7 @@ gem "rack-cors"
 
 group :test do
   gem 'rubocop-discourse'
+  gem 'database_cleaner-active_record'
 end
 
 group :development, :test do
