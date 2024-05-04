@@ -10,6 +10,13 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :categories, only: [:index, :update, :destroy, :create]
+      resources :answers, only: [:index, :update, :destroy, :create]
+      resources :questions, only: [:index, :update, :destroy, :create]
+      resources :questionnaires, only: [:index, :update, :destroy, :create]
+      resources :sessions, only: [:index, :update, :destroy, :create]
+      resources :scopes, only: [:index, :update, :destroy, :create]
+      resources :given_answers, only: [:index, :update, :destroy, :create]
+      resources :session_users, only: [:index, :update, :destroy, :create]
     end
   end
 end
