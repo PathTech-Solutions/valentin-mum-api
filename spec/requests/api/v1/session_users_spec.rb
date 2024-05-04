@@ -1,7 +1,11 @@
 require "rails_helper"
 
 RSpec.describe "Api::V1::SessionUsers" do
-  describe "GET /index" do
-    pending "add some examples (or delete) #{__FILE__}"
+  it_behaves_like "CRUD actions", :session_user do
+    let(:session) { create(:session) }
+    let(:shared_session) { create(:session) }
+    let(:valid_attributes) do
+      { session_id: session.id, shared_session_id: shared_session.id }
+    end
   end
 end

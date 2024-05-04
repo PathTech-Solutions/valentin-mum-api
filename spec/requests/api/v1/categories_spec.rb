@@ -1,7 +1,9 @@
 require "rails_helper"
 
 RSpec.describe "Api::V1::Categories" do
-  describe "GET /index" do
-    pending "add some examples (or delete) #{__FILE__}"
+  it_behaves_like "CRUD actions", :category do
+    let(:valid_attributes) do
+      { name: "Category text" }
+    end
   end
 end

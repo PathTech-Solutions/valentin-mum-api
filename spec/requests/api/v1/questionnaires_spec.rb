@@ -1,7 +1,10 @@
 require "rails_helper"
 
 RSpec.describe "Api::V1::Questionnaires" do
-  describe "GET /index" do
-    pending "add some examples (or delete) #{__FILE__}"
+  it_behaves_like "CRUD actions", :questionnaire do
+    let(:category) { create(:category) }
+    let(:valid_attributes) do
+      { category_id: category.id }
+    end
   end
 end

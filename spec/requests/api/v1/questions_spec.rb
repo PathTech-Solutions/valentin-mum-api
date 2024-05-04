@@ -1,7 +1,9 @@
 require "rails_helper"
 
 RSpec.describe "Api::V1::Questions" do
-  describe "GET /index" do
-    pending "add some examples (or delete) #{__FILE__}"
+  it_behaves_like "CRUD actions", :question do
+    let(:valid_attributes) do
+      { statement: "Question statement", question_type: "open" }
+    end
   end
 end

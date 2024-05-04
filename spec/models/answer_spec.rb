@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Answer do
-  let(:answer) { build(:answer, score: 1) }
+  let(:answer) { build(:answer) }
 
   context "when Should validate" do
     it "with score, text and question present" do

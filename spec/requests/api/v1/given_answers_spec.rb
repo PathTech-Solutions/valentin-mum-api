@@ -1,7 +1,11 @@
 require "rails_helper"
 
 RSpec.describe "Api::V1::GivenAnswers" do
-  describe "GET /index" do
-    pending "add some examples (or delete) #{__FILE__}"
+  it_behaves_like "CRUD actions", :given_answer do
+    let(:answer) { create(:answer) }
+    let(:session) { create(:session) }
+    let(:valid_attributes) do
+      { text: "GivenAnswers text", answer_id: answer.id, session_id: session.id }
+    end
   end
 end
