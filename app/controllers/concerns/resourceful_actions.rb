@@ -7,8 +7,9 @@ module ResourcefulActions
   end
 
   def index
-    @resources = @model.where(resource_params)
-    render json: @resources
+    @resources = @model.includes(associations_to_include).where(resource_params)
+
+    render json: @resources.as_json(include: associations_to_include)
   end
 
   def create
@@ -60,5 +61,9 @@ module ResourcefulActions
 
   def model_name_in_params?
     params[@model.name.underscore.to_sym].present?
+  end
+
+  def associations_to_include
+    @model.reflect_on_all_associations.map(&:name)
   end
 end
