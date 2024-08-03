@@ -7,9 +7,9 @@ module ResourcefulActions
   end
 
   def index
-    @resources = @model.includes(referenced_associations).where(resource_params)
+    @resources = @model.includes(associations_to_include).where(resource_params)
 
-    render json: @resources.as_json(include: referenced_associations)
+    render json: @resources.as_json(include: associations_to_include)
   end
 
   def create
@@ -63,12 +63,7 @@ module ResourcefulActions
     params[@model.name.underscore.to_sym].present?
   end
 
-  def referenced_associations
-    foreign_keys = @model.column_names.select { |col| col.end_with?("_id") }
-    association_names = foreign_keys.map { |fk| fk.chomp("_id").to_sym }
-
-    @model.reflect_on_all_associations
-          .select { |assoc| association_names.include?(assoc.name) }
-          .map(&:name)
+  def associations_to_include
+    @model.reflect_on_all_associations.map(&:name)
   end
 end
