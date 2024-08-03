@@ -64,11 +64,9 @@ module ResourcefulActions
   end
 
   def referenced_associations
-    # Extract attribute names and remove `_id` to find associated names
     foreign_keys = @model.column_names.select { |col| col.end_with?("_id") }
     association_names = foreign_keys.map { |fk| fk.chomp("_id").to_sym }
 
-    # Filter only associations that exist in the model
     @model.reflect_on_all_associations
           .select { |assoc| association_names.include?(assoc.name) }
           .map(&:name)
