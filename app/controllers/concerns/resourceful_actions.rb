@@ -7,8 +7,9 @@ module ResourcefulActions
   end
 
   def index
-    @resources = @model.where(resource_params)
-    render json: @resources
+    @resources = @model.includes(referenced_associations).where(resource_params)
+
+    render json: @resources.as_json(include: referenced_associations)
   end
 
   def create
@@ -60,5 +61,16 @@ module ResourcefulActions
 
   def model_name_in_params?
     params[@model.name.underscore.to_sym].present?
+  end
+
+  def referenced_associations
+    # Extract attribute names and remove `_id` to find associated names
+    foreign_keys = @model.column_names.select { |col| col.end_with?("_id") }
+    association_names = foreign_keys.map { |fk| fk.chomp("_id").to_sym }
+
+    # Filter only associations that exist in the model
+    @model.reflect_on_all_associations
+          .select { |assoc| association_names.include?(assoc.name) }
+          .map(&:name)
   end
 end
